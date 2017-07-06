@@ -54,6 +54,10 @@ def getSoup(url):
 Guild Wars 2 Wiki-specific functions
 """
 
+"""
+This function returns the first two paragraphs of the given wiki article.
+"""
+
 
 @make_pretty
 async def getGWWikiHTML(query):
