@@ -517,6 +517,17 @@ async def getOutfitCount(DiscordID):
 
 
 @make_pretty
+async def getPermissions(DiscordID):
+    APIKey = DataBaseUtils.getAPIKey(DiscordID)
+    AccessToken = "?access_token=" + str(APIKey)
+    tokenInfoJSON = await getJSON(gw2_api_url + "tokeninfo" + AccessToken)
+    result = "Here are the permissions associated with your API Key: \n"
+    for permission in tokenInfoJSON.get('permissions'):
+        result += permission + "\n"
+    return result
+
+
+@make_pretty
 async def getProfessions():
     results = Strings.all["list"].format("professions") + " \n"
     profJSON = await getJSON(gw2_api_url + "professions")

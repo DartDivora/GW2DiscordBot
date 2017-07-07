@@ -288,6 +288,15 @@ async def outfits(ctx):
 
 
 @bot.group(pass_context=True)
+async def permissions(ctx):
+    DiscordID = ctx.message.author.id
+    if DataBaseUtils.hasAPIKey(DiscordID):
+        await bot.send_message(ctx.message.channel, await WebUtils.getPermissions(DiscordID))
+    else:
+        await bot.send_message(ctx.message.channel, String.all["no_api_key"])
+
+
+@bot.group(pass_context=True)
 async def professions(ctx):
     await bot.send_message(ctx.message.channel, await WebUtils.getProfessions())
 
