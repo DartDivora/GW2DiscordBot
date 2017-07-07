@@ -3,8 +3,8 @@ A place for developing a Guild Wars 2 Discord Bot using the [discord.py library]
 
 ### Things you probably need:
  - **Git** - You can pick it up [here](https://git-scm.com/download/) if you don't have it. You need it to clone the repo.
- - **Python** - This allows you to run python scripts locally. Installing this is different depending on your host OS. Use google.
- - **PIP** - This is the python package manager. It pulls in the junk that other folks wrote that our awesome project needs.
+ - **Python** - You need this to run Python. The link is [here](https://www.python.org).
+ - **PIP** - This is the python package manager. This comes along with the Python installation.
 
 ### Some nice to haves:
 People like using different things to get their local environment set up. Here is some of the stuff we use:
