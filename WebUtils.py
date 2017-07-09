@@ -7,6 +7,7 @@ from collections import defaultdict
 import Strings
 
 gw2_api_url = "https://api.guildwars2.com/v2/"
+gw2_wiki_url = "https://wiki.guildwars2.com/wiki/"
 maxItems = 30
 
 """
@@ -61,8 +62,7 @@ This function returns the first two paragraphs of the given wiki article.
 
 @make_pretty
 async def getGWWikiHTML(query):
-    result = getSoup("https://wiki.guildwars2.com/wiki/" +
-                     query.replace(" ", "_"))
+    result = getSoup(gw2_wiki_url + query.replace(" ", "_"))
     if result == None:
         return "an error occurred getting your query, boss: " + query
     return result.select("p")[0].getText() + "\n" + result.select("p")[1].getText()

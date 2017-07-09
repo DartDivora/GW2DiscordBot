@@ -8,8 +8,8 @@ A place for developing a Guild Wars 2 Discord Bot using the [discord.py library]
 
 ### Some nice to haves:
 People like using different things to get their local environment set up. Here is some of the stuff we use:
- - **Atom** - This is a lightweight program/text editor with a ton of nice plugins. It was developed by the fine folks here at GitHub. ([Download](https://atom.io/)). 
-    - **Atom Packages that are nice to have:** 
+ - **Atom** - This is a lightweight program/text editor with a ton of nice plugins. It was developed by the fine folks here at GitHub. ([Download](https://atom.io/)).
+    - **Atom Packages that are nice to have:**
        - **[atom-runner](https://github.com/lsegal/atom-runner)** - Allows you to run python scripts from within Atom.
        - **[atom-beautify](https://atom.io/packages/atom-beautify)** - Allows you to easily make your python code look real pretty.
  - **Scoop** - This is a windows utility that acts like Homebrew. It is a command line installer and  application package manager/repository. You can use it to really easily install python for windows. ([Download](http://scoop.sh/))
@@ -27,4 +27,5 @@ Here are some quick, but detailed instructions on how to get the project running
     - Run GWBotSetup.py to create the database and tables, as well as loading the tables for future use.
     - Run the main application file with `python GWBotMain.py <bot-token>` where the bot token is for the App you created.
 - By default the bots will listen to mentions and commands after `!gw2`.
-- To register an api key, you can use "register INSERT_API_KEY_HERE" (it is recommended to pm the bot this information so that it is not visible to everyone). 
+- To register an api key, you can use "register INSERT_API_KEY_HERE" (it is recommended to pm the bot this information so that it is not visible to everyone).
+- To get a list of commands the bot supports, you can use the command "help".
