@@ -72,17 +72,20 @@ Guild Wars 2 API-specific functions
 """
 
 
-async def getAccountData(DiscordID):
+def getAccessToken(DiscordID):
     APIKey = DataBaseUtils.getAPIKey(DiscordID)
-    result = await getJSON(gw2_api_url + "account?access_token=" + APIKey)
+    AccessToken = "?access_token=" + APIKey
+    return AccessToken
+
+
+async def getAccountData(DiscordID):
+    result = await getJSON(gw2_api_url + "account" + getAccessToken(DiscordID))
     return result
 
 
 @make_pretty
 async def getAchievements(DiscordID):
-    APIKey = DataBaseUtils.getAPIKey(DiscordID)
-    AccessToken = "?access_token=" + str(APIKey)
-    acJSON = await getJSON(gw2_api_url + "account/achievements/" + AccessToken)
+    acJSON = await getJSON(gw2_api_url + "account/achievements/" + getAccessToken(DiscordID))
     counter = 0
     for achievement in acJSON:
         if achievement.get('done'):
@@ -95,7 +98,6 @@ async def getAchievements(DiscordID):
 
 @make_pretty
 async def getBankCount(DiscordID, name):
-    APIKey = DataBaseUtils.getAPIKey(DiscordID)
     data = DataBaseUtils.findItemByName(name)
     if(len(data) > maxItems):
         return Strings.all["too_many_items"].format(str(len(data)), str(maxItems))
@@ -104,7 +106,7 @@ async def getBankCount(DiscordID, name):
     itemDict = {}
     for item in data:
         itemDict[item[0]] = (item[1], 0)
-    url = gw2_api_url + "account/bank?access_token=" + APIKey
+    url = gw2_api_url + "account/bank" + getAccessToken(DiscordID)
     bankItems = await getJSON(url)
     for item in bankItems:
         if item is None:
@@ -126,8 +128,7 @@ async def getBankCount(DiscordID, name):
 @make_pretty
 async def getCats(DiscordID):
     results = "Here is a list of your cats: \n"
-    APIKey = DataBaseUtils.getAPIKey(DiscordID)
-    catJSON = await getJSON(gw2_api_url + "account/home/cats?access_token=" + APIKey)
+    catJSON = await getJSON(gw2_api_url + "account/home/cats" + getAccessToken(DiscordID))
     for cat in catJSON:
         results += "catID: " + str(cat.get('id')) + \
             " catName: " + cat.get('hint') + "\n"
@@ -153,15 +154,13 @@ async def getCharacterInventory(DiscordID, ItemName):
         return Strings.all["too_many_items"].format(str(len(data)), str(maxItems))
     elif(len(data) < 1):
         return Strings.all["no_results"]
-    APIKey = DataBaseUtils.getAPIKey(DiscordID)
-    AccessToken = "?access_token=" + str(APIKey)
     itemDict = {}
     for item in data:
         itemDict[item[0]] = (item[1], 0)
 
-    characterJSON = await getJSON(gw2_api_url + "characters" + AccessToken)
+    characterJSON = await getJSON(gw2_api_url + "characters" + getAccessToken(DiscordID))
     for character in characterJSON:
-        characterInv = await getJSON(gw2_api_url + "characters/" + character + "/inventory" + AccessToken)
+        characterInv = await getJSON(gw2_api_url + "characters/" + character + "/inventory" + getAccessToken(DiscordID))
         for bag in characterInv.get('bags'):
             if bag is None:
                 continue
@@ -184,10 +183,8 @@ async def getCharacterInventory(DiscordID, ItemName):
 
 @make_pretty
 async def getCharacterEquipment(DiscordID, charname):
-    APIKey = DataBaseUtils.getAPIKey(DiscordID)
-    AccessToken = "?access_token=" + str(APIKey)
     CharacterEquipment = {}
-    characterEqJSON = await getJSON(gw2_api_url + "characters/" + charname + "/equipment" + AccessToken)
+    characterEqJSON = await getJSON(gw2_api_url + "characters/" + charname + "/equipment" + getAccessToken(DiscordID))
     if characterEqJSON is not None:
         CharacterEquipment[charname] = characterEqJSON
     else:
@@ -206,8 +203,7 @@ async def getCharacterEquipment(DiscordID, charname):
 @make_pretty
 async def getCharacters(DiscordID):
     results = "Here is a list of your characters: \n"
-    APIKey = DataBaseUtils.getAPIKey(DiscordID)
-    characterJSON = await getJSON(gw2_api_url + "characters?access_token=" + APIKey)
+    characterJSON = await getJSON(gw2_api_url + "characters" + getAccessToken(DiscordID))
     for character in characterJSON:
         results += character + "\n"
     return results
@@ -231,9 +227,7 @@ async def getDungeons():
 
 @make_pretty
 async def getDyeCount(DiscordID):
-    APIKey = DataBaseUtils.getAPIKey(DiscordID)
-    AccessToken = "?access_token=" + str(APIKey)
-    dyeJSON = await getJSON(gw2_api_url + "account/dyes" + AccessToken)
+    dyeJSON = await getJSON(gw2_api_url + "account/dyes" + getAccessToken(DiscordID))
     totalDyeJSON = await getJSON(gw2_api_url + "colors")
     results = Strings.all["count_with_total"].format(
         str(len(dyeJSON)), "dye", str(len(totalDyeJSON)))
@@ -242,9 +236,7 @@ async def getDyeCount(DiscordID):
 
 @make_pretty
 async def getFinisherCount(DiscordID):
-    APIKey = DataBaseUtils.getAPIKey(DiscordID)
-    AccessToken = "?access_token=" + str(APIKey)
-    finisherJSON = await getJSON(gw2_api_url + "account/finishers" + AccessToken)
+    finisherJSON = await getJSON(gw2_api_url + "account/finishers" + getAccessToken(DiscordID))
     finisherCount = 0
     for finisher in finisherJSON:
         if finisher.get('permanent'):
@@ -278,14 +270,12 @@ async def getFullItemCount(DiscordID, ItemName):
         return Strings.all["too_many_items"].format(str(len(data)), str(maxItems))
     elif(len(data) < 1):
         return Strings.all["no_results"]
-    APIKey = DataBaseUtils.getAPIKey(DiscordID)
-    AccessToken = "?access_token=" + str(APIKey)
     itemDict = {}
     for item in data:
         itemDict[item[0]] = (item[1], 0)
 
     # Bank
-    bank_url = gw2_api_url + "account/bank?access_token=" + APIKey
+    bank_url = gw2_api_url + "account/bank" + getAccessToken(DiscordID)
     bankItems = await getJSON(bank_url)
     for item in bankItems:
         if item is None:
@@ -296,9 +286,9 @@ async def getFullItemCount(DiscordID, ItemName):
             new_value = old_value[0], old_value[1] + item.get('count')
             itemDict[itemID] = new_value
     # Character Inventory
-    characterJSON = await getJSON(gw2_api_url + "characters" + AccessToken)
+    characterJSON = await getJSON(gw2_api_url + "characters" + getAccessToken(DiscordID))
     for character in characterJSON:
-        characterInv = await getJSON(gw2_api_url + "characters/" + character + "/inventory" + AccessToken)
+        characterInv = await getJSON(gw2_api_url + "characters/" + character + "/inventory" + getAccessToken(DiscordID))
         for bag in characterInv.get('bags'):
             if bag is None:
                 continue
@@ -311,7 +301,7 @@ async def getFullItemCount(DiscordID, ItemName):
                     new_value = old_value[0], old_value[1] + item.get('count')
                     itemDict[itemID] = new_value
     # Materials
-    materialsJSON = await getJSON(gw2_api_url + "account/materials" + AccessToken)
+    materialsJSON = await getJSON(gw2_api_url + "account/materials" + getAccessToken(DiscordID))
     for item in materialsJSON:
         if item is None:
             continue
@@ -331,9 +321,7 @@ async def getFullItemCount(DiscordID, ItemName):
 
 @make_pretty
 async def getGliderCount(DiscordID):
-    APIKey = DataBaseUtils.getAPIKey(DiscordID)
-    AccessToken = "?access_token=" + str(APIKey)
-    gliderJSON = await getJSON(gw2_api_url + "account/gliders" + AccessToken)
+    gliderJSON = await getJSON(gw2_api_url + "account/gliders" + getAccessToken(DiscordID))
     totalGliderJSON = await getJSON(gw2_api_url + "gliders")
     results = Strings.all["count_with_total"].format(
         str(len(gliderJSON)), "glider", str(len(totalGliderJSON)))
@@ -342,17 +330,15 @@ async def getGliderCount(DiscordID):
 
 @make_pretty
 async def getHeroPoints(DiscordID, charname):
-    APIKey = DataBaseUtils.getAPIKey(DiscordID)
-    AccessToken = "?access_token=" + str(APIKey)
     HeroPointDict = {}
     if charname is None:
-        characterJSON = await getJSON(gw2_api_url + "characters" + AccessToken)
+        characterJSON = await getJSON(gw2_api_url + "characters" + getAccessToken(DiscordID))
         for character in characterJSON:
-            characterHP = await getJSON(gw2_api_url + "characters/" + character + "/heropoints" + AccessToken)
+            characterHP = await getJSON(gw2_api_url + "characters/" + character + "/heropoints" + getAccessToken(DiscordID))
             HeroPointDict[character] = len(characterHP)
             results = "Here is a list of how many of Hero Points you have on each character... \n"
     else:
-        characterJSON = await getJSON(gw2_api_url + "characters/" + charname + "/heropoints" + AccessToken)
+        characterJSON = await getJSON(gw2_api_url + "characters/" + charname + "/heropoints" + getAccessToken(DiscordID))
         if characterJSON is not None:
             HeroPointDict[charname] = len(characterJSON)
             results = "Here are how many Hero Points you have on " + charname + "... \n"
@@ -368,9 +354,7 @@ async def getHeroPoints(DiscordID, charname):
 
 @make_pretty
 async def getHomeNodes(DiscordID):
-    APIKey = DataBaseUtils.getAPIKey(DiscordID)
-    AccessToken = "?access_token=" + str(APIKey)
-    homeNodeJSON = await getJSON(gw2_api_url + "account/home/nodes" + AccessToken)
+    homeNodeJSON = await getJSON(gw2_api_url + "account/home/nodes" + getAccessToken(DiscordID))
     totalNodeJSON = await getJSON(gw2_api_url + "nodes")
     results = "Here are a list of nodes you have in your home: "
     for node in homeNodeJSON:
@@ -424,9 +408,7 @@ async def getItemPrice(name):
 
 @make_pretty
 async def getMailCarrierCount(DiscordID):
-    APIKey = DataBaseUtils.getAPIKey(DiscordID)
-    AccessToken = "?access_token=" + str(APIKey)
-    mailCarrierJSON = await getJSON(gw2_api_url + "account/mailcarriers" + AccessToken)
+    mailCarrierJSON = await getJSON(gw2_api_url + "account/mailcarriers" + getAccessToken(DiscordID))
     totalMailCarrierJSON = await getJSON(gw2_api_url + "mailcarriers")
     results = Strings.all["count_with_total"].format(
         str(len(mailCarrierJSON)), "mail carrier", str(len(totalMailCarrierJSON)))
@@ -435,16 +417,14 @@ async def getMailCarrierCount(DiscordID):
 
 @make_pretty
 async def getMasteryCount(DiscordID):
-    APIKey = DataBaseUtils.getAPIKey(DiscordID)
-    AccessToken = "?access_token=" + str(APIKey)
-    masteryJSON = await getJSON(gw2_api_url + "account/mastery/points" + AccessToken)
+    masteryJSON = await getJSON(gw2_api_url + "account/mastery/points" + getAccessToken(DiscordID))
     results = "You have the following mastery point counts: \n\n"
     for mastery in masteryJSON.get('totals'):
         results += "Region: " + mastery.get('region') + "\n"
         results += "Spent: " + str(mastery.get('spent')) + \
             " Earned: " + str(mastery.get('earned')) + "\n\n"
     results += "Individual Masteries: \n\n"
-    individualMasteryJSON = await getJSON(gw2_api_url + "account/masteries" + AccessToken)
+    individualMasteryJSON = await getJSON(gw2_api_url + "account/masteries" + getAccessToken(DiscordID))
     masteryDescJSON = await getJSON(gw2_api_url + "masteries?ids=all")
     individualMasteryDict = {}
     for mastery in individualMasteryJSON:
@@ -470,12 +450,10 @@ async def getMaterials(DiscordID, ItemName):
         return Strings.all["too_many_items"].format(str(len(data)), str(maxItems))
     elif(len(data) < 1):
         return Strings.all["no_results"]
-    APIKey = DataBaseUtils.getAPIKey(DiscordID)
-    AccessToken = "?access_token=" + str(APIKey)
     itemDict = {}
     for item in data:
         itemDict[item[0]] = (item[1], 0)
-    itemJSON = await getJSON(gw2_api_url + "account/materials" + AccessToken)
+    itemJSON = await getJSON(gw2_api_url + "account/materials" + getAccessToken(DiscordID))
     for item in itemJSON:
         if item is None:
             continue
@@ -496,10 +474,8 @@ async def getMaterials(DiscordID, ItemName):
 
 @make_pretty
 async def getMiniCount(DiscordID):
-    APIKey = DataBaseUtils.getAPIKey(DiscordID)
-    AccessToken = "?access_token=" + str(APIKey)
-    miniJSON = await getJSON(gw2_api_url + "account/minis" + AccessToken)
-    miniTotalJSON = await getJSON(gw2_api_url + "minis" + AccessToken)
+    miniJSON = await getJSON(gw2_api_url + "account/minis" + getAccessToken(DiscordID))
+    miniTotalJSON = await getJSON(gw2_api_url + "minis")
     results = Strings.all["count_with_total"].format(
         str(len(miniJSON)), "mini", str(len(miniTotalJSON)))
     return results
@@ -507,10 +483,8 @@ async def getMiniCount(DiscordID):
 
 @make_pretty
 async def getOutfitCount(DiscordID):
-    APIKey = DataBaseUtils.getAPIKey(DiscordID)
-    AccessToken = "?access_token=" + str(APIKey)
-    outfitJSON = await getJSON(gw2_api_url + "account/outfits" + AccessToken)
-    outfitTotalJSON = await getJSON(gw2_api_url + "outfits" + AccessToken)
+    outfitJSON = await getJSON(gw2_api_url + "account/outfits" + getAccessToken(DiscordID))
+    outfitTotalJSON = await getJSON(gw2_api_url + "outfits")
     results = Strings.all["count_with_total"].format(
         str(len(outfitJSON)), "outfit", str(len(outfitTotalJSON)))
     return results
@@ -518,9 +492,7 @@ async def getOutfitCount(DiscordID):
 
 @make_pretty
 async def getPermissions(DiscordID):
-    APIKey = DataBaseUtils.getAPIKey(DiscordID)
-    AccessToken = "?access_token=" + str(APIKey)
-    tokenInfoJSON = await getJSON(gw2_api_url + "tokeninfo" + AccessToken)
+    tokenInfoJSON = await getJSON(gw2_api_url + "tokeninfo" + getAccessToken(DiscordID))
     result = "Here are the permissions associated with your API Key: \n"
     for permission in tokenInfoJSON.get('permissions'):
         result += permission + "\n"
@@ -584,9 +556,7 @@ async def getRemainingAP(DiscordID):
 
 @make_pretty
 async def getRecipeCount(DiscordID):
-    APIKey = DataBaseUtils.getAPIKey(DiscordID)
-    AccessToken = "?access_token=" + str(APIKey)
-    recipeJSON = await getJSON(gw2_api_url + "account/recipes" + AccessToken)
+    recipeJSON = await getJSON(gw2_api_url + "account/recipes" + getAccessToken(DiscordID))
     totalRecipeJSON = await getJSON(gw2_api_url + "recipes")
     results = Strings.all["count_with_total"].format(
         str(len(recipeJSON)), "recipe", str(len(totalRecipeJSON)))
@@ -595,9 +565,7 @@ async def getRecipeCount(DiscordID):
 
 @make_pretty
 async def getSkinCount(DiscordID):
-    APIKey = DataBaseUtils.getAPIKey(DiscordID)
-    AccessToken = "?access_token=" + str(APIKey)
-    skinJSON = await getJSON(gw2_api_url + "account/skins" + AccessToken)
+    skinJSON = await getJSON(gw2_api_url + "account/skins" + getAccessToken(DiscordID))
     totalSkinJSON = await getJSON(gw2_api_url + "skins")
     results = Strings.all["count_with_total"].format(
         str(len(skinJSON)), "skin", str(len(totalSkinJSON)))
@@ -605,9 +573,7 @@ async def getSkinCount(DiscordID):
 
 
 async def getTitles(DiscordID):
-    APIKey = DataBaseUtils.getAPIKey(DiscordID)
-    AccessToken = "?access_token=" + str(APIKey)
-    titles = await getJSON(gw2_api_url + "account/titles" + AccessToken)
+    titles = await getJSON(gw2_api_url + "account/titles" + getAccessToken(DiscordID))
     titleDescriptions = await getJSON(gw2_api_url + "titles?ids=all")
     titleDict = {}
     for description in titleDescriptions:
@@ -628,12 +594,10 @@ async def getWallet(DiscordID, currencyName):
             return Strings.all["no_results"]
     else:
         data = DataBaseUtils.selectAllQuery("currencies")
-    APIKey = DataBaseUtils.getAPIKey(DiscordID)
-    AccessToken = "?access_token=" + str(APIKey)
     itemDict = {}
     for item in data:
         itemDict[item[0]] = (item[1], 0)
-    itemJSON = await getJSON(gw2_api_url + "account/wallet" + AccessToken)
+    itemJSON = await getJSON(gw2_api_url + "account/wallet" + getAccessToken(DiscordID))
     for item in itemJSON:
         if item is None:
             continue
