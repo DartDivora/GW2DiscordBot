@@ -3,8 +3,8 @@ import bs4
 import json
 import DataBaseUtils
 import aiohttp
-from collections import defaultdict
 import Strings
+from collections import defaultdict
 
 gw2_api_url = "https://api.guildwars2.com/v2/"
 gw2_wiki_url = "https://wiki.guildwars2.com/wiki/"
@@ -210,6 +210,22 @@ async def getCharacters(DiscordID):
 
 
 @make_pretty
+async def getDailyAchievements():
+    dailyJSON = await getJSON(gw2_api_url + "achievements/daily")
+    result = "Here are today's dailies: \n"
+    dailyDict = {}
+    for gameType in dailyJSON:
+        result += gameType + ":\n"
+        for daily in dailyJSON.get(gameType):
+            dailyNameJSON = await getJSON(gw2_api_url + "achievements?id=" + str(daily.get('id')))
+            result += "Achievement ID: " + \
+                str(daily.get('id')) + " Achievement Name: " + \
+                dailyNameJSON.get('name') + "\n"
+        result += "\n"
+    return result
+
+
+@make_pretty
 async def getDisplayName(DiscordID):
     nameJSON = await getAccountData(DiscordID)
     result = "Your account name is: " + nameJSON.get('name')
@@ -374,8 +390,8 @@ async def getItemInfoByName(name):
     results = ""
     for item in data:
         key = str(item[0])
-        #url = gw2_api_url + "items?id=" + key
-        #itemPicture = json.loads(getJSON(url).text).get('icon')
+        # url = gw2_api_url + "items?id=" + key
+        # itemPicture = json.loads(getJSON(url).text).get('icon')
         results += key + ": " + item[1] + "\n"
     return results
 

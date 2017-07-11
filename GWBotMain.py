@@ -124,6 +124,21 @@ async def currencies(ctx):
 
 
 @bot.group(pass_context=True)
+async def dailies(ctx):
+    dailies = await WebUtils.getDailyAchievements()
+    counter = 0
+    results = "```"
+    for dailies in dailies.split("\n"):
+        counter += 1
+        results += dailies + "\n"
+        if counter >= 30:
+            results += "```"
+            await bot.send_message(ctx.message.channel, results)
+            results = "```"
+            counter = 0
+
+
+@bot.group(pass_context=True)
 async def dailyap(ctx):
     DiscordID = ctx.message.author.id
     if DataBaseUtils.hasAPIKey(DiscordID):
