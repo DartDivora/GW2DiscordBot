@@ -210,8 +210,11 @@ async def getCharacters(DiscordID):
 
 
 @make_pretty
-async def getDailyAchievements():
-    dailyJSON = await getJSON(gw2_api_url + "achievements/daily")
+async def getDailyAchievements(tomorrow):
+    dailyURL = gw2_api_url + "achievements/daily"
+    if(tomorrow):
+        dailyURL += "/tomorrow"
+    dailyJSON = await getJSON(dailyURL)
     result = "Here are today's dailies: \n"
     dailyDict = {}
     for gameType in dailyJSON:

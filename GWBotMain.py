@@ -124,8 +124,13 @@ async def currencies(ctx):
 
 
 @bot.group(pass_context=True)
-async def dailies(ctx):
-    dailies = await WebUtils.getDailyAchievements()
+async def dailies(ctx, *, message):
+    if message == "tomorrow":
+        dailies = await WebUtils.getDailyAchievements(True)
+    elif message == "today":
+        dailies = await WebUtils.getDailyAchievements(False)
+    else:
+        await bot.send_message(ctx.message.channel, "Invalid message: " + message + " options are today and tomorrow!")
     counter = 0
     results = "```"
     for dailies in dailies.split("\n"):
