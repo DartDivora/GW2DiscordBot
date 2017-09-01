@@ -215,7 +215,7 @@ async def getDailyAchievements(tomorrow):
     if(tomorrow):
         dailyURL += "/tomorrow"
     dailyJSON = await getJSON(dailyURL)
-    result = "Here are today's dailies: \n"
+    result = "Here are the dailies: \n"
     dailyDict = {}
     for gameType in dailyJSON:
         result += gameType + ":\n"
@@ -512,7 +512,10 @@ async def getOutfitCount(DiscordID):
 @make_pretty
 async def getPermissions(DiscordID):
     tokenInfoJSON = await getJSON(gw2_api_url + "tokeninfo" + getAccessToken(DiscordID))
+    print(tokenInfoJSON)
     result = "Here are the permissions associated with your API Key: \n"
+    if 'permissions' not in tokenInfoJSON:
+        return Strings.all["bad_api_key"]
     for permission in tokenInfoJSON.get('permissions'):
         result += permission + "\n"
     return result
@@ -659,3 +662,14 @@ async def gw2Exchange(currencyType, quantity):
         results = Strings.all["exchange"].format("gems", quantity, "coins", str(currencyJSON.get(
             'coins_per_gem') / 10000), str(currencyJSON.get('quantity') / 10000), "gems")
     return results
+
+
+async def hasPermissions(APIKey):
+    tokenInfoJSON = await getJSON(gw2_api_url + "tokeninfo?access_token=" + APIKey)
+    print(tokenInfoJSON)
+    if tokenInfoJSON is None:
+        return False
+    elif 'permissions' not in tokenInfoJSON:
+        return False
+    else:
+        return True

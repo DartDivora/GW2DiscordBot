@@ -353,9 +353,15 @@ async def raids(ctx):
 
 @bot.group(pass_context=True)
 async def register(ctx, *, message):
-    DataBaseUtils.registerAPIKey(
-        ctx.message.author.id, ctx.message.author.display_name, message)
-    await bot.send_message(ctx.message.channel, "API Key Registered!")
+    DiscordID = ctx.message.author.id
+    permissions = await WebUtils.hasPermissions(message)
+    print(permissions)
+    if permissions:
+        DataBaseUtils.registerAPIKey(
+            DiscordID, ctx.message.author.display_name, message)
+        await bot.send_message(ctx.message.channel, "API Key Registered!")
+    else:
+        await bot.send_message(ctx.message.channel, Strings.all["bad_api_key"])
 
 
 @bot.group(pass_context=True)
@@ -436,8 +442,9 @@ async def wvw(ctx):
 """
 Init script
 """
-if len(sys.argv) >= 2:
-    bot_token = sys.argv[1]
-    bot.run(sys.argv[1])
-else:
-    print("A bot token was not provided, the script will now end!!!")
+if __name__ == "__main__":
+    if len(sys.argv) >= 2:
+        bot_token = sys.argv[1]
+        bot.run(sys.argv[1])
+    else:
+        print("A bot token was not provided, the script will now end!!!")
