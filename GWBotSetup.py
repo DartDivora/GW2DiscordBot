@@ -29,6 +29,7 @@ async def loadItems(itemsPerChunk):
                     itemCounter += 1
                 counter = 0
                 itemIDs = []
+    print("Item Loading Complete!")
 
 
 async def getGW2ApiData(name):
@@ -48,4 +49,5 @@ async def main():
 
 loop = asyncio.get_event_loop()
 loop.run_until_complete(main())
+print("Initial DB setup complete!")
 loop.close()
