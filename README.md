@@ -29,3 +29,47 @@ Here are some quick, but detailed instructions on how to get the project running
 - By default the bots will listen to mentions and commands after `!gw2`.
 - To register an api key, you can use "register INSERT_API_KEY_HERE" (it is recommended to pm the bot this information so that it is not visible to everyone).
 - To get a list of commands the bot supports, you can use the command "help".
+
+### Commands:
+- accountinfo - presents a full list of basic account information.
+- bank - retrieves a count of a given item from you bank.
+- cats - gets a list of unlocked cats.
+- cathint - gets a list of hints for cats that the API provides.
+- characters - gets a list of characters for your account.
+- coins - gives the rate for a certain amount of coins (in bronze)
+- continents - gets a list of continents.
+- currencies - gets a list of currencies.
+- dailies (usages: "today","tomorrow") - gets a list of daily achievements.
+- dailyap - tells the user how many daily AP they can get before maxing out.
+- dungeons - gets a list of dungeons.
+- dyes - gets a count of dyes unlocked on your account.
+- equip (usages: "all" or character name) - gets a list of equipment for a given character or all characters.
+- findall - finds a count of a given item across all character, bank, and material storage (will check by partial name as well).
+- finishers - gets a count of finishers unlocked on your account.
+- fractals - gets a list of fractals.
+- gems - gives the rate for a certain amount of gems to gold.
+- gliders - gets a count of gliders unlocked on your account.
+- hp (usages: "all" or character name) - gets a count of Hero Points for a given character or all characters.
+- inventory - searches through all characters for a count of a given item (will check by partial name as well).
+- item - retrieves item info for a given item (will check by partial name as well).
+- mailcarriers - gets a count of Mail Carriers unlocked on your account.
+- mastery - gets a list of mastery points, as well as information for each mastery category.
+- materials - searches through material storage for a count of a given item (will check by partial name as well).
+- minis - gets a count of minis unlocked on your account.
+- name - gets your display name.
+- nodes - gets a list of home instance nodes unlocked on your account.
+- outfits - gets a list of outfits unlocked on your account.
+- permissions - gets a list of permissions associated with the API Key provided.
+- professions - gets a list of professions.
+- price - gets the price of a given item (will check by partial name as well).
+- quaggans - gets a list of quaggans.
+- races - gets a list of races.
+- raids - gets a list of raids.
+- register - registers a given API Key to your Discord ID. 
+- recipes - gets a count of recipes unlocked on your account.
+- skins - gets a count of skins unlocked on your account.
+- titles - gets a list of titles unlocked on your account.
+- wallet (usages: "all" or a given currency) - provides a count of all currencies or the currency name provided in your wallet.
+- wiki - searches the wiki for a given search string and returns the beginning of the page.
+- world - gets the world you are on by name.
+- wvw - gets your World vs. World rank.
