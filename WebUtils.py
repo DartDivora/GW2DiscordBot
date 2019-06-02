@@ -28,7 +28,7 @@ Utility Functions
 
 
 async def getJSON(url):
-    async with aiohttp.get(url) as r:
+    async with aiohttp.ClientSession().get(url) as r:
         if r.status == 200:
             js = await r.json()
             return js
@@ -169,6 +169,7 @@ async def getCharacterInventory(DiscordID, ItemName):
                     continue
                 itemID = item.get('id')
                 if itemID in itemDict:
+                    print(str(itemDict))
                     old_value = itemDict[itemID]
                     new_value = old_value[0], old_value[1] + item.get('count')
                     itemDict[itemID] = new_value
@@ -209,7 +210,6 @@ async def getCharacters(DiscordID):
     return results
 
 
-@make_pretty
 async def getDailyAchievements(tomorrow):
     dailyURL = gw2_api_url + "achievements/daily"
     if(tomorrow):
