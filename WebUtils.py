@@ -44,6 +44,7 @@ def getSoup(url):
         res = requests.get(url, headers={'User-Agent': 'Mozilla/5.0'})
         res.raise_for_status()
     except requests.exceptions.HTTPError as err:
+        print(err)
         return None
     except requests.exceptions.ConnectionError as err:
         return (url)
@@ -216,7 +217,6 @@ async def getDailyAchievements(tomorrow):
         dailyURL += "/tomorrow"
     dailyJSON = await getJSON(dailyURL)
     result = "Here are the dailies: \n"
-    dailyDict = {}
     for gameType in dailyJSON:
         result += gameType + ":\n"
         for daily in dailyJSON.get(gameType):
